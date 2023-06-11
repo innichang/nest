@@ -8,15 +8,46 @@ describe('UsersController', () => {
   let controller: UsersController;
   let service: UsersService;
 
+  const mockUserService = {
+    getUsers: jest.fn((dto) => {
+      return {
+        ...dto,
+      };
+    }),
+    getUserByName: jest.fn((dto) => {
+      return {
+        ...dto,
+      };
+    }),
+    getUserById: jest.fn((dto) => {
+      return {
+        ...dto,
+      };
+    }),
+    createUser: jest.fn((dto) => {
+      return {
+        ...dto,
+      };
+    }),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [TypeOrmModule.forFeature([UserEntity])],
       controllers: [UsersController],
-      providers: [UsersService],
-    }).compile();
+      providers: [
+        {
+          provide: 'USER_SERVICE',
+          useClass: UsersService,
+        },
+      ],
+    })
+      .overrideProvider('USER_SERVICE')
+      .useValue(mockUserService)
+      .compile();
 
     controller = module.get<UsersController>(UsersController);
-    service = module.get<UsersService>(UsersService);
+    service = module.get<UsersService>('USER_SERVICE');
   });
 
   it('should be defined', () => {
