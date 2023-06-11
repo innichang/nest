@@ -6,7 +6,7 @@ import { UsersModule } from './users/users.module';
 // import { EntityListenerMetadata } from 'typeorm/metadata/EntityListenerMetadata';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
-import entities from './typeorm';
+import entities, { Post, User } from './typeorm';
 import { UsersController } from './users/controllers/users/users.controller';
 import { PostsController } from './posts/controller/posts/posts.controller';
 import { CustomersController } from './customers/controllers/customers/customers.controller';
@@ -19,7 +19,6 @@ import { PostsService } from './posts/service/posts/posts.service';
 
 @Module({
   imports: [
-    CustomersModule,
     UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -31,10 +30,11 @@ import { PostsService } from './posts/service/posts/posts.service';
       entities: entities,
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([User, Post]),
     AuthModule,
     PostsModule,
   ],
-  controllers: [UsersController, PostsController, CustomersController],
+  controllers: [UsersController, PostsController],
   providers: [
     {
       provide: 'AUTH_SERVICE',
