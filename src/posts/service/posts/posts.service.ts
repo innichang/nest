@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UpdatePostDto } from 'src/posts/dtos/UpdatePostDto';
 import { Post as PostEntity } from 'src/typeorm';
 import { UsersService } from 'src/users/services/users/users.service';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 
 @Injectable()
 export class PostsService {
@@ -36,6 +36,18 @@ export class PostsService {
   async getPostById(postId: number) {
     const post = await this.postRepository.findBy({ id: postId });
     return post;
+  }
+
+  async getPostByUserId(userId: number) {
+    const posts = await this.postRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .select(['post.id', 'post.title', 'post.description', 'user.id'])
+      .where('user.id = :userId', { userId })
+      .getMany();
+
+    console.log(posts);
+    return posts;
   }
 
   async updatePost(

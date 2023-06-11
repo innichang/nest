@@ -8,9 +8,13 @@ import { AuthService } from 'src/auth/services/auth/auth.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { AppModule } from 'src/app.module';
+import { PostRepository } from 'src/typeorm/repository/post.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, User]), UsersModule],
+  imports: [
+    TypeOrmModule.forFeature([Post, User, PostRepository]),
+    UsersModule,
+  ],
   controllers: [PostsController],
   providers: [
     {

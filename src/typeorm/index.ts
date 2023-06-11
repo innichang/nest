@@ -1,5 +1,5 @@
-import { User } from './User';
-import { Post } from './Post';
+import { User } from './Entities/User';
+import { Post } from './Entities/Post';
 const entities = { User, Post };
 
 export { User, Post };

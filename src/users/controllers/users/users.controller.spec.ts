@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from 'src/users/services/users/users.service';
-import { SerializedUser } from 'src/users/types';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User as UserEntity } from 'src/typeorm';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -9,6 +10,7 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [TypeOrmModule.forFeature([UserEntity])],
       controllers: [UsersController],
       providers: [UsersService],
     }).compile();
@@ -25,12 +27,14 @@ describe('UsersController', () => {
     const result = [
       {
         id: 1,
-        username: 'test',
-        emailAddress: 'test@gmail.com',
+        username: 'test_username',
+        password: 'test_password',
+        emailAddress: 'test@email.com',
+        posts: [],
       },
     ];
-    jest.spyOn(service, 'getUsers').mockImplementation(() => result);
+    jest.spyOn(service, 'getUsers').mockResolvedValue(result);
 
-    expect(await controller.getUsers()).toBe(result);
+    expect(await controller.getUsers()).toEqual(result);
   });
 });

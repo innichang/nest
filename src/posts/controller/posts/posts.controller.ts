@@ -49,6 +49,12 @@ export class PostsController {
     return post;
   }
 
+  @Get('/userId/:userId')
+  async getPostByUserId(@Param('userId', ParseIntPipe) userId: number) {
+    const posts = await this.postsService.getPostByUserId(userId);
+    return posts;
+  }
+
   @UseGuards(JwtAuthGuard)
   @Patch('/update/postId/:postId')
   async updatePost(

@@ -7,6 +7,12 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import entities from './typeorm';
+import { UsersController } from './users/controllers/users/users.controller';
+import { PostsController } from './posts/controller/posts/posts.controller';
+import { CustomersController } from './customers/controllers/customers/customers.controller';
+import { AuthService } from './auth/services/auth/auth.service';
+import { UsersService } from './users/services/users/users.service';
+import { PostsService } from './posts/service/posts/posts.service';
 // import { JwtAuthGuard } from './auth/utils/jwt-auth.guard';
 // import { APP_GUARD, Reflector } from '@nestjs/core';
 // import * as Joi from 'joi';
@@ -28,7 +34,20 @@ import entities from './typeorm';
     AuthModule,
     PostsModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [UsersController, PostsController, CustomersController],
+  providers: [
+    {
+      provide: 'AUTH_SERVICE',
+      useClass: AuthService,
+    },
+    {
+      provide: 'USER_SERVICE',
+      useClass: UsersService,
+    },
+    {
+      provide: 'POST_SERVICE',
+      useClass: PostsService,
+    },
+  ],
 })
 export class AppModule {}
