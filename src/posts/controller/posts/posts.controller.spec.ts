@@ -9,6 +9,9 @@ import { User } from 'src/typeorm';
 
 describe('PostsController', () => {
   let controller: PostsController;
+  let service: PostsService;
+
+  const mockPostsService = {};
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -28,7 +31,10 @@ describe('PostsController', () => {
           useClass: AuthService,
         },
       ],
-    }).compile();
+    })
+      .overrideProvider('POST_SERVICE')
+      .useValue(mockPostsService)
+      .compile();
 
     controller = module.get<PostsController>(PostsController);
   });
@@ -36,4 +42,29 @@ describe('PostsController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  // it('should return an array of posts', async () => {
+  //   const mockPost = {
+  //     id: 1,
+  //     title: 'test_title',
+  //     description: 'test_description',
+  //     user: 1,
+  //   };
+  //   jest.spyOn(service, 'getPost').mockResolvedValue([mockPost]);
+
+  //   const result = await service.getPost();
+
+  //   expect(result).toEqual(
+  //     expect.arrayContaining([
+  //       expect.objectContaining([
+  //         {
+  //           id: expect.any(Number),
+  //           title: expect.any(String),
+  //           description: expect.any(String),
+  //           user: expect.any(Number),
+  //         },
+  //       ]),
+  //     ]),
+  //   );
+  // });
 });

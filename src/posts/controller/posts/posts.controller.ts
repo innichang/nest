@@ -16,11 +16,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AuthService } from 'src/auth/services/auth/auth.service';
-import { JwtAuthGuard } from 'src/auth/utils/jwt-auth.guard';
-import { CreatePostDto } from 'src/posts/dtos/CreatePostDto';
-import { UpdatePostDto } from 'src/posts/dtos/UpdatePostDto';
-import { PostsService } from 'src/posts/service/posts/posts.service';
+import { CreatePostDto } from '../../dtos/CreatePostDto';
+import { PostsService } from '../../service/posts/posts.service';
+import { JwtAuthGuard } from '../../../auth/utils/jwt-auth.guard';
+import { UpdatePostDto } from '../../dtos/UpdatePostDto';
 
 @Controller('posts')
 export class PostsController {

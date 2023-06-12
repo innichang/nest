@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { PostsService } from './service/posts/posts.service';
 import { PostsController } from './controller/posts/posts.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Post, User } from 'src/typeorm';
-import { UsersService } from 'src/users/services/users/users.service';
-import { AuthService } from 'src/auth/services/auth/auth.service';
-import { UsersModule } from 'src/users/users.module';
-import { PostRepository } from 'src/typeorm/repository/post.repository';
+import { UsersService } from '../users/services/users/users.service';
+import { AuthService } from '../auth/services/auth/auth.service';
+import { PostRepository } from '../typeorm/repository/post.repository';
+import { UsersModule } from '../users/users.module';
+import { Post, User } from '../typeorm';
 
 @Module({
   imports: [

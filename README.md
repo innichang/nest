@@ -78,3 +78,7 @@ Update될 내용, postId, userId를 모두 받아와서 update하려는 post가 
 Delete:<br>
 @Delete('/delete/postId/:postId') // endpoint => /api/posts/delete/postId/:postId<br>
 위 @Patch와 동일한 성질로 동작
+
+### Update Logs
+
+6/12/2023 | update: e2e + db health check

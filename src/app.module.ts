@@ -1,21 +1,20 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import { ConfigModule } from '@nestjs/config';
-import { CustomersModule } from './customers/customers.module';
 import { UsersModule } from './users/users.module';
-// import { EntityListenerMetadata } from 'typeorm/metadata/EntityListenerMetadata';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import entities, { Post, User } from './typeorm';
 import { UsersController } from './users/controllers/users/users.controller';
 import { PostsController } from './posts/controller/posts/posts.controller';
-import { CustomersController } from './customers/controllers/customers/customers.controller';
 import { AuthService } from './auth/services/auth/auth.service';
 import { UsersService } from './users/services/users/users.service';
 import { PostsService } from './posts/service/posts/posts.service';
-// import { JwtAuthGuard } from './auth/utils/jwt-auth.guard';
-// import { APP_GUARD, Reflector } from '@nestjs/core';
-// import * as Joi from 'joi';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
+import { HealthCheckController } from './health-check/health-check.controller';
+import { HealthCheckModule } from './health-check/health-check.module';
+import { TerminusModule } from '@nestjs/terminus';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -33,9 +32,18 @@ import { PostsService } from './posts/service/posts/posts.service';
     TypeOrmModule.forFeature([User, Post]),
     AuthModule,
     PostsModule,
+    HealthCheckModule,
+    TerminusModule,
+    HttpModule,
   ],
-  controllers: [UsersController, PostsController],
+  controllers: [
+    UsersController,
+    PostsController,
+    AppController,
+    HealthCheckController,
+  ],
   providers: [
+    AppService,
     {
       provide: 'AUTH_SERVICE',
       useClass: AuthService,
