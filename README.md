@@ -36,10 +36,10 @@ UsersController => @Inject(UsersService)로 사용된다.
 
 #### CRUD 동작들:
 
-Create: <br>@Post('signup') //endpoint /api/users/signup<br>
+Create: <br>@Post('signup') /api/users/signup<br>
 유저 정보를 CreateUserDto의 형식으로 받아서 유저를 가입시킨다.
 
-Read: <br>@Get('username/:username') //endpoint => /api/users/username/:username <br>
+Read: <br>@Get('username/:username') /api/users/username/:username <br>
 유저이름을 받아서 유저를 찾아온다. (동일하게 id로 찾는것도 존재함)
 
 ---
@@ -58,13 +58,13 @@ import: TypeOrmModule과 UserModule<br>
 #### CRUD 동작들:
 
 Create: <br>
-@Post('') // endpoint => /api/posts<br>
+@Post('') /api/posts<br>
 CreatePostDto 형태의 body request를 받아 새로운 포스트를 등록 시킨다.<br>
 이때 함께 들어오는 사용자의 jwt를 사용해서 유저를 파악하고, post를 생성하는 유저 정보도 함께 저장.
 <br>
 <br>
 Read: <br>
-@Get ('') // endpoint => /api/posts<br>
+@Get ('') /api/posts<br>
 모든 포스트에 대한 정보를 불러옴<br><br>
 @Get ('/postId/:postId') endpoint => /api/posts/postId/:postId<br>
 포스트를 id에 관하여 불러온다<br><br>
@@ -72,11 +72,11 @@ Read: <br>
 특정 유저가 쓴 모든 포스트를 불러온다<br><br>
 
 Update: <br>
-@Patch('/update/postId/:postId') // endpoint => /api/posts/update/postId/:postId <br>
+@Patch('/update/postId/:postId') /api/posts/update/postId/:postId <br>
 Update될 내용, postId, userId를 모두 받아와서 update하려는 post가 해당 userId를 가지고 있어야 update가능
 <br><br>
 Delete:<br>
-@Delete('/delete/postId/:postId') // endpoint => /api/posts/delete/postId/:postId<br>
+@Delete('/delete/postId/:postId') /api/posts/delete/postId/:postId<br>
 위 @Patch와 동일한 성질로 동작
 
 ### Update Logs
