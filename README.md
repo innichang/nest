@@ -66,9 +66,9 @@ CreatePostDto 형태의 body request를 받아 새로운 포스트를 등록 시
 Read: <br>
 @Get ('') /api/posts<br>
 모든 포스트에 대한 정보를 불러옴<br><br>
-@Get ('/postId/:postId') endpoint => /api/posts/postId/:postId<br>
+@Get ('/postId/:postId') /api/posts/postId/:postId<br>
 포스트를 id에 관하여 불러온다<br><br>
-@Get('/userId/:userId') endpoint => /api/posts/userId/:userId<br>
+@Get('/userId/:userId') /api/posts/userId/:userId<br>
 특정 유저가 쓴 모든 포스트를 불러온다<br><br>
 
 Update: <br>
