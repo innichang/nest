@@ -81,4 +81,4 @@ Delete:<br>
 
 ### Update Logs
 
-6/12/2023 | update: e2e + db health check
+6/12/2023 | update: user controller + service unit test,, e2e test,, db health check
