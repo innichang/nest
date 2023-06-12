@@ -20,6 +20,7 @@ export class UsersService {
         ...createUserDto,
         password,
       });
+      console.log(newUser);
       return await this.userRepository.save(newUser);
     } else {
       throw new BadRequestException();

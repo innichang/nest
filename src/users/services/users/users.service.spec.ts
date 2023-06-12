@@ -3,19 +3,24 @@ import { UsersService } from './users.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User, User as UserEntity } from 'src/typeorm';
 import { Repository } from 'typeorm';
+import { mockUser } from '../../../../test/test-data/user/user.data.e2e';
+import { serializedUser } from '../../../../test/test-data/user/user.data.e2e';
+import { createUser } from '../../../../test/test-data/user/user.data.e2e';
 
 describe('UsersService', () => {
   let service: UsersService;
   let userRepository: Repository<User>;
 
   const mockUsersRepository = {
-    create: jest.fn().mockImplementation((dto) => dto),
-    save: jest
-      .fn()
-      .mockImplementation((user) =>
-        Promise.resolve({ id: Date.now(), ...user }),
-      ),
-    findOne: jest.fn().mockImplementation((username) => username),
+    find: jest.fn().mockResolvedValue([mockUser]),
+    findOne: jest.fn().mockResolvedValue(serializedUser),
+    create: jest.fn().mockResolvedValue(createUser),
+    save: jest.fn().mockResolvedValue({
+      id: 1,
+      username: 'test_username',
+      emailAddress: 'test@email.com',
+      password: 'test_password',
+    }),
   };
 
   beforeEach(async () => {
@@ -41,13 +46,25 @@ describe('UsersService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should create a new user record and return', async () => {
-    const mockUser = {
-      username: 'test123',
-      emailAddress: 'test123@email.com',
-      password: 'test_password123',
-    };
+  it('SUCCESS: should return an array of users', async () => {
+    const result = await service.getUsers();
 
+    expect(result).toEqual([mockUser]);
+  });
+
+  it('SUCCESS: should return a user by username', async () => {
+    const result = await service.getUserByName('test_username');
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        username: serializedUser.username,
+        emailAddress: expect.any(String),
+      }),
+    );
+  });
+
+  it('should create a new user record and return', async () => {
     expect(await service.createUser(mockUser)).toEqual({
       id: expect.any(Number),
       username: expect.any(String),
