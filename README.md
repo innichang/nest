@@ -44,7 +44,9 @@ Read: <br>@Get('username/:username') //endpoint => /api/users/username/:username
 
 ---
 
-Unit-Test: <br> UsersController에 관하여 작성. <br> UsersService에서 유저에대한 모든 정보가 넘어올때 민감 정보를 노출시키지않기 위해, class-validator이 존재하는데 @UsePipes 데코레이터로 함수에 적용. 그것이 제대로 적용되는지 테스트.
+#### Unit-Test:
+
+UsersController에 관하여 작성. <br> UsersService에서 유저에대한 모든 정보가 넘어올때 민감 정보를 노출시키지않기 위해, class-validator이 존재하는데 @UsePipes 데코레이터로 함수에 적용. 그것이 제대로 적용되는지 테스트.
 
 ### 3. Post
 
