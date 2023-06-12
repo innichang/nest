@@ -1,73 +1,78 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Simple CRUD server using Nest.js
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<br>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 테이블 관계
 
-## Description
+Users : Post = 1 : Many
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 구조
 
-## Installation
+사용되는 PostModule, UserModule, AuthModule 이 AppModule로 이어지는 형태
 
-```bash
-$ npm install
-```
+AppModule에는 사용에 필요한 TypeOrmModule을 보유하고있고,
+AuthService, UsersService, PostsService가 providers로 들어가 있다.
 
-## Running the app
+### 1. Auth
 
-```bash
-# development
-$ npm run start
+Injection에 필요한 AuthService와 UsersService를 providers로 받고, Jwt발급을 위한 모듈, TypeOrm을 사용하기위한 모듈을 import해서 사용자가 로그인할때 발생하는 작업을 수행한다.
 
-# watch mode
-$ npm run start:dev
+<br>AuthController => @Inject(AuthService)
+<br>AuthService => @Inject(UsersService)
 
-# production mode
-$ npm run start:prod
-```
+#### login
 
-## Test
+@Post('login') // endpoint: /api/auth/login은
+username, password를 req.body로 받으며 시작된다. <br><br>
+login 함수가 service 딴에 validateUser로 넘기면, validateUser에서는 여러가지 기능들이 동작하는데, <br> 먼저 uesrsService.findUserbyUsername으로 유저 존재의 유무를 파악하면서 정보를 가져온다.
+<br>정보가 존재하면 bcrypt.ts에 작성해놓은 comparePasswords로 암호화된 비밀번호와 요청받은 비밀번호를 비교해, <br>
+if true => jwt 발급<br>
+if false => UnauthorizedException('Invalid Entry')
 
-```bash
-# unit tests
-$ npm run test
+### 2. User
 
-# e2e tests
-$ npm run test:e2e
+실제로 사용되는 UsersService만 provider로 받으며 <br>
+UsersController => @Inject(UsersService)로 사용된다.
 
-# test coverage
-$ npm run test:cov
-```
+#### CRUD 동작들:
 
-## Support
+Create: <br>@Post('signup') //endpoint /api/users/signup<br>
+유저 정보를 CreateUserDto의 형식으로 받아서 유저를 가입시킨다.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Read: <br>@Get('username/:username') //endpoint => /api/users/username/:username <br>
+유저이름을 받아서 유저를 찾아온다. (동일하게 id로 찾는것도 존재함)
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Unit-Test: <br> UsersController에 관하여 작성. <br> UsersService에서 유저에대한 모든 정보가 넘어올때 민감 정보를 노출시키지않기 위해, class-validator이 존재하는데 @UsePipes 데코레이터로 함수에 적용. 그것이 제대로 적용되는지 테스트.
 
-## License
+### 3. Post
 
-Nest is [MIT licensed](LICENSE).
+PostModule에서는 PostsService, UsersService, AuthService가 모두 providers로 등록됨.<br>
+import: TypeOrmModule과 UserModule<br>
+대부분의 호출에는 jwt가 동반하며, create,update,delete는 token을 해독한 후 authorize가 가능하면 실행한다.<br>
+@UseGuards(JwtAuthGuard) 로 들어오는 요청 보호
+
+#### CRUD 동작들:
+
+Create: <br>
+@Post('') // endpoint => /api/posts<br>
+CreatePostDto 형태의 body request를 받아 새로운 포스트를 등록 시킨다.<br>
+이때 함께 들어오는 사용자의 jwt를 사용해서 유저를 파악하고, post를 생성하는 유저 정보도 함께 저장.
+<br>
+<br>
+Read: <br>
+@Get ('') // endpoint => /api/posts<br>
+모든 포스트에 대한 정보를 불러옴<br><br>
+@Get ('/postId/:postId') endpoint => /api/posts/postId/:postId<br>
+포스트를 id에 관하여 불러온다<br><br>
+@Get('/userId/:userId') endpoint => /api/posts/userId/:userId<br>
+특정 유저가 쓴 모든 포스트를 불러온다<br><br>
+
+Update: <br>
+@Patch('/update/postId/:postId') // endpoint => /api/posts/update/postId/:postId <br>
+Update될 내용, postId, userId를 모두 받아와서 update하려는 post가 해당 userId를 가지고 있어야 update가능
+<br><br>
+Delete:<br>
+@Delete('/delete/postId/:postId') // endpoint => /api/posts/delete/postId/:postId<br>
+위 @Patch와 동일한 성질로 동작

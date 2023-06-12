@@ -5,9 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post, User } from 'src/typeorm';
 import { UsersService } from 'src/users/services/users/users.service';
 import { AuthService } from 'src/auth/services/auth/auth.service';
-import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
-import { AppModule } from 'src/app.module';
 import { PostRepository } from 'src/typeorm/repository/post.repository';
 
 @Module({

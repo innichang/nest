@@ -12,6 +12,8 @@ import {
   RequestTimeoutException,
   UnprocessableEntityException,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthService } from 'src/auth/services/auth/auth.service';
@@ -27,6 +29,7 @@ export class PostsController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   @Post('')
   async createPost(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
     const user: any = req.user;
@@ -57,6 +60,7 @@ export class PostsController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('/update/postId/:postId')
+  @UsePipes(ValidationPipe)
   async updatePost(
     @Body() updatePostDto: UpdatePostDto,
     @Param('postId', ParseIntPipe) postId: number,

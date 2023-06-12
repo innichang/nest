@@ -92,7 +92,7 @@ describe('UsersController', () => {
       expect(result).toEqual(
         expect.objectContaining({
           id: expect.any(Number),
-          username: expect.any(String),
+          username: 'test_username',
           emailAddress: expect.any(String),
         }),
       );
@@ -112,7 +112,7 @@ describe('UsersController', () => {
 
       expect(result).toEqual(
         expect.objectContaining({
-          id: expect.any(Number),
+          id: 1,
           username: expect.any(String),
           emailAddress: expect.any(String),
         }),

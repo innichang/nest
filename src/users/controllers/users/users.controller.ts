@@ -9,7 +9,6 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Res,
   UseFilters,
   UseInterceptors,
   UsePipes,
@@ -54,7 +53,7 @@ export class UsersController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('signup')
-  @UsePipes(ValidationPipe) //to ensure  class-validators occur
+  //@UsePipes(ValidationPipe) //to ensure  class-validators occur
   async createUser(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.createUser(createUserDto);
     return new SerializedUser(user);
