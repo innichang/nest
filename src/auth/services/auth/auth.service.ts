@@ -10,7 +10,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   async validateUser(username: string, password: string): Promise<any> {
-    const userDB = await this.userService.findUserByUsername(username);
+    const userDB = await this.userService.getUserByName(username);
     if (userDB) {
       const result = await comparePasswords(password, userDB.password);
       if (result) {
